@@ -1,0 +1,54 @@
+﻿@model Microsoft.AspNet.Identity.EntityFramework.IdentityRole
+@{
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-9 col-sm-8">
+            <h1 class="page-header">
+                Admin Panel
+            </h1>
+            @using (Html.BeginForm())
+            {
+                <fieldset>
+                    <legend>Role</legend>
+                    @Html.DisplayNameFor(model => model.Name)
+                    @Html.EditorFor(model => model.Name)
+                    <input type="submit" value="Add">
+                </fieldset>
+            }
+            <br>
+            <div class="panel panel-default">
+                <table class="table">
+                    
+                    <tr>
+                        <th>
+                            RoleName
+                        </th>
+                        <th>
+
+                        </th>
+                    </tr>
+                    <tbody>
+                    @if (ViewBag.Roles.Count != 0)
+                    {
+                        foreach (var role in ViewBag.Roles)
+                        {
+                            <tr>
+                                <td>
+                                    @role.Name
+                                </td>
+                                <td>
+                                    @Html.ActionLink("Удалить", "DeleteRole", new {id = role.Id })
+                                </td>
+                            </tr>
+                        }
+                    }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <!-- /.row -->
+</div>

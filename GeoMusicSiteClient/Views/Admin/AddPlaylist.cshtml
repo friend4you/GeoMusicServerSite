@@ -1,0 +1,59 @@
+﻿@model GeoMusicSiteClient.Models.DBModel.Playlist
+@{
+    ViewBag.Title = "AddPlaylist";
+}
+<div class="container">
+    @using (Html.BeginForm("AddPlaylist", "Admin", FormMethod.Post, new { enctype = "multipart/form-data" }))
+            {
+        <fieldset>
+            <table class="table">
+                <tr>
+                    <th>@Html.DisplayNameFor(model => model.Title)</th>
+                    <td>
+                        @Html.EditorFor(model => model.Title)
+                    </td>
+                </tr>
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Description)
+                    </th>
+                    <td> @Html.EditorFor(model => model.Description)</td>
+                </tr>
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Author)
+                    </th>
+                    <td>
+                        <select name="Author">
+                            @foreach (var author in ViewBag.Users)
+                            {
+                                <option>@author.UserName</option>
+                            }
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Category)
+                    </th>
+                    <td>
+                        <select name="CategoryId">
+                            @foreach (var category in ViewBag.Categories)
+                            {
+                                <option value="@category.id">@category.Name</option>
+                            }
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Image)
+                    </th>
+                    <td><input type="file" name="playlistImage"></td>
+                </tr>
+                <tr><td><input type="submit" value="Add"></td></tr>
+
+            </table>
+        </fieldset>
+    }
+</div>

@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="d3702c4575824ddf9f019275696ac51b" Name="Diagram1">
+        <EntityTypeShape EntityType="geomusicModel.C__MigrationHistory" Width="1.5" PointX="3.875" PointY="0.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="geomusicModel.AspNetRoles" Width="1.5" PointX="0.75" PointY="8.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="geomusicModel.AspNetUserClaims" Width="1.5" PointX="5.25" PointY="5" IsExpanded="true" />
+        <EntityTypeShape EntityType="geomusicModel.AspNetUserLogins" Width="1.5" PointX="5.25" PointY="7.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="geomusicModel.AspNetUsers" Width="1.5" PointX="3" PointY="5.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="geomusicModel.Categories" Width="1.5" PointX="5.25" PointY="10.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="geomusicModel.Favorites" Width="1.5" PointX="12" PointY="4.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="geomusicModel.Playlists" Width="1.5" PointX="7.5" PointY="7.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="geomusicModel.Records" Width="1.5" PointX="9.75" PointY="7" IsExpanded="true" />
+        <EntityTypeShape EntityType="geomusicModel.Subscribes" Width="1.5" PointX="12.75" PointY="7.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="geomusicModel.UsingPlaylists" Width="1.5" PointX="12.75" PointY="10.75" IsExpanded="true" />
+        <AssociationConnector Association="geomusicModel.FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId" ManuallyRouted="false" />
+        <AssociationConnector Association="geomusicModel.FK_dbo_AspNetUserLogins_dbo_AspNetUsers_UserId" ManuallyRouted="false" />
+        <AssociationConnector Association="geomusicModel.FK_dbo_Categories_dbo_AspNetUsers_ApplicationUser_Id" ManuallyRouted="false" />
+        <AssociationConnector Association="geomusicModel.FK_dbo_Favorites_dbo_AspNetUsers_UserId_Id" ManuallyRouted="false" />
+        <AssociationConnector Association="geomusicModel.FK_dbo_Playlists_dbo_AspNetUsers_ApplicationUser_Id" ManuallyRouted="false" />
+        <AssociationConnector Association="geomusicModel.FK_dbo_Playlists_dbo_AspNetUsers_ApplicationUser_Id1" ManuallyRouted="false" />
+        <AssociationConnector Association="geomusicModel.FK_dbo_Records_dbo_AspNetUsers_ApplicationUser_Id" ManuallyRouted="false" />
+        <AssociationConnector Association="geomusicModel.FK_dbo_Subscribes_dbo_AspNetUsers_UserId_Id" ManuallyRouted="false" />
+        <AssociationConnector Association="geomusicModel.FK_dbo_UsingPlaylists_dbo_AspNetUsers_User_Id" ManuallyRouted="false" />
+        <AssociationConnector Association="geomusicModel.FK_dbo_Playlists_dbo_Categories_Category_id" ManuallyRouted="false" />
+        <AssociationConnector Association="geomusicModel.FK_dbo_Favorites_dbo_Records_RecordId_id" ManuallyRouted="false" />
+        <AssociationConnector Association="geomusicModel.FK_dbo_Records_dbo_Playlists_Playlist_id" ManuallyRouted="false" />
+        <AssociationConnector Association="geomusicModel.FK_dbo_Subscribes_dbo_Playlists_PlaylistId_id" ManuallyRouted="false" />
+        <AssociationConnector Association="geomusicModel.FK_dbo_UsingPlaylists_dbo_Playlists_Playlist_id" ManuallyRouted="false" />
+        <AssociationConnector Association="geomusicModel.AspNetUserRoles" ManuallyRouted="false" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

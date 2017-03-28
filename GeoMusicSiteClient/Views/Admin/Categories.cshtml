@@ -1,0 +1,106 @@
+﻿@model GeoMusicSiteClient.Models.DBModel.Category
+@{
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+
+}
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-9 col-sm-8">
+            <h1 class="page-header">
+                Admin Panel
+            </h1>
+            @using (Html.BeginForm("Categories", "Admin", FormMethod.Post, new { enctype = "multipart/form-data" }))
+            {
+                <fieldset>
+                    <legend>Categories</legend>
+                    <div class="panel panel-default">
+                        <table class="table">
+                            <tr>
+                                <td>
+                                    @Html.DisplayNameFor(model => model.Name)
+                                </td>
+                                <td>
+                                    @Html.EditorFor(model => model.Name)
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    @Html.DisplayNameFor(model => model.Description)
+                                </td>
+                                <td>
+                                    @Html.EditorFor(model => model.Description)
+                                </td>
+                            </tr>                            
+                            <tr>
+                                <td>
+                                    @Html.Display("Color")
+                                </td>
+                                <td>
+                                    <input type="color" name="catColor">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    @Html.Display("Image")
+                                </td>
+                                <td>
+                                    <input type="file" name="catImage">
+                                </td>
+                            </tr>
+                            <tr>                                
+                                <td><input type="submit" value="Добавить"></td>
+                            </tr>
+                        </table>
+                    </div>
+                </fieldset>
+            }
+
+            <br>
+            <div class="panel panel-default">
+                <table class="table">
+                    <tr>
+                        <th>
+                            Название
+                        </th>
+                        <th>
+                            Описание
+                        </th>
+                        <th>
+                            Цвет
+                        </th>
+                        <th>
+                            Изображение
+                        </th>
+                        <th>
+
+                        </th>
+                    </tr>
+
+                    @foreach (var category in ViewBag.Categories)
+                    {
+                        <tr>
+                            <td>
+                                @category.Name
+                            </td>
+                            <td>
+                                @category.Description
+                            </td>
+                            <td>
+                                @category.Color
+                            </td>
+                            <td>
+                                <img src="@category.Image" style="width: 100px;" alt="@category.Name">
+                            </td>
+                            <td>
+                                @Html.ActionLink("Редактировании", "Edit", new { id = category.id }) <br>
+                                @Html.ActionLink("Удалить", "DeleteCategory", new { id = category.id })
+                            </td>
+                        </tr>
+                    }
+                </table>
+            </div>
+        </div>
+    </div>
+    <!-- /.row -->
+</div>

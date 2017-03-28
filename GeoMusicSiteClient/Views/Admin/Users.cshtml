@@ -1,0 +1,106 @@
+﻿@model GeoMusicSiteClient.Models.ApplicationUser
+@{
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+<div class="container">
+    <div class="row">
+        <div class="col-md-9 col-sm-8">
+            <h1 class="page-header">
+                Admin Panel
+            </h1>
+            @using (Html.BeginForm("Categories", "Admin", FormMethod.Post, new { enctype = "multipart/form-data" }))
+            {
+                <div class="panel panel-default">
+                    <table class="table">
+                        <tr>
+                            <th>
+                                Имя
+                            </th>
+                            <th>
+                                Email
+                            </th>
+                            <th>
+                                Categories
+                            </th>
+                            <th>
+                            </th>
+                        </tr>
+                        <tr>
+                            <td>@Html.EditorFor(model => model.UserName)</td>
+                            <td>@Html.EditorFor(model => model.Email)</td>
+                            <td>
+                                <div class="btn-group">
+                                    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        Select category<span class="caret"></span>
+                                    </button>
+                                    <ul class="dropdown-menu">
+                                        @foreach (var category in ViewBag.Categories)
+                                        {
+                                            <li><input type="checkbox">@category.Name</li>
+                                        }
+                                    </ul>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="btn-group">
+                                    <button type="button" class="btn">Добавить</button>
+                                    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        <span class="caret"></span>
+                                        <span class="sr-only">Toggle Dropdown</span>
+                                    </button>
+                                    <ul class="dropdown-menu">
+                                        <li><a href="#">Add</a></li>
+                                        <li><a href="#">Edit</a></li>
+                                    </ul>
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            }
+            <br>
+            <div class="panel panel-default">
+                <table class="table">
+                    <tr>
+                        <th>
+                            Имя
+                        </th>
+                        <th>
+                            Email
+                        </th>
+                        <th>
+                            Categories
+                        </th>
+                        <th>
+                        </th>
+                    </tr>
+                    @foreach (var user in ViewBag.Users)
+                    {
+                        <tr>
+                            <td>
+                                @user.UserName
+                            </td>
+                            <td>
+                                @user.Email
+                            </td>
+                            <td>
+                                <ul>
+                                @foreach (var category in user.Categories)
+                                {
+                                    <li>@category.Name</li>
+                                }
+                                    </ul>
+                            </td>
+                            <td>
+                                @Html.ActionLink("Редактировании", "EditUser", new { id = user.Id })
+                                @Html.ActionLink("Удалить", "Delete", new { id = user.Id })
+                            </td>
+                        </tr>
+                    }
+                </table>
+            </div>
+        </div>
+    </div>
+    <div id="fade" class="black-overlay"></div>
+    <!-- /.row -->
+</div>

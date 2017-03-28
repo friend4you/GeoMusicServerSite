@@ -1,0 +1,63 @@
+﻿@{
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+
+}
+<div class="container">
+    <div class="row">
+        <div class="col-md-9 col-sm-8">
+            <h1 class="page-header">
+                Admin Panel
+            </h1>
+            @if (ViewBag.Playlists.Count != 0)
+            {
+                @Html.ActionLink("Добавить плейлист", "AddPlaylist", "Admin")
+                <br />
+
+                <table class="table">
+                    <tr>
+                        <th>
+                            Название
+                        </th>
+                        <th>
+                            Автор
+                        </th>
+                        <th style="width:200px;">
+                            Описание
+                        </th>
+                        <th>
+                            Категория
+                        </th>
+                        <th>
+                        </th>
+                    </tr>
+                    @foreach (var playlist in ViewBag.Playlists)
+                {
+                        <tr>
+                            <td>
+                                @playlist.Title
+                            </td>
+                            <td>
+                                @playlist.Author
+                            </td>
+                            <td>
+                                @playlist.Description
+                            </td>
+                            <td>
+                                @playlist.Category.Name
+                            </td>
+                            <td>
+                                @Html.ActionLink("Редактировать", "EditPlaylist", new { id = playlist.id })
+                                @Html.ActionLink("Удалить", "DeletePlaylist", new { id = playlist.id })
+                            </td>
+                        </tr>
+                    }
+                </table>
+            }
+            else
+            {
+                @Html.ActionLink("Добавить плейлист", "AddPlaylist", "Admin")
+            }
+        </div>
+    </div>
+    <!-- /.row -->
+</div>

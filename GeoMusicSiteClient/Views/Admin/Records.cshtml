@@ -1,0 +1,125 @@
+﻿@model GeoMusicSiteClient.Models.DBModel.Record
+@{
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+
+}
+<div class="container">
+    <div class="row">
+        <div class="col-md-9 col-sm-8">
+            <h1 class="page-header">
+                Admin Panel
+            </h1>
+            @using (Html.BeginForm("Records", "Admin", FormMethod.Post, new { enctype = "multipart/form-data" }))
+            {
+                <fieldset>
+                    <table class="table">
+                        <tr>
+                            <th>@Html.DisplayNameFor(model => model.Title)</th>
+                            <td>
+                                @Html.EditorFor(model => model.Title)
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Artist)
+                            </th>
+                            <td>
+                                @Html.EditorFor(model => model.Artist)
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Description)
+                            </th>
+                            <td> @Html.EditorFor(model => model.Description)</td>
+                        </tr>
+                        <tr>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Url)
+                            </th>
+                            <td> @Html.EditorFor(model => model.Url)</td>
+                        </tr>
+                        <tr>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Lat)
+                            </th>
+                            <td>@Html.EditorFor(model => model.Lat)</td>
+                        </tr>
+                        <tr>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Long)
+                            </th>
+                            <td> @Html.EditorFor(model => model.Long)</td>
+                        </tr>
+                        <tr>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Image)
+                            </th>                            
+                            <td><input type="file" name="recordImage"></td>
+                        </tr>
+                        <tr><td><input type="submit" value="Add"></td></tr>
+
+                    </table>
+                </fieldset>
+            }
+            <table class="table">
+                <tr>
+                    <th>
+                        Название
+                    </th>
+                    <th>
+                        Автор
+                    </th>
+                    <th>
+                        Описание
+                    </th>
+                    <th>
+                        Дата добавления
+                    </th>
+                    <th>
+                        Изображение
+                    </th>                    
+                    <th>
+                        Latitude
+                    </th>
+                    <th>
+                        Longitude
+                    </th>
+                    <th>
+                    </th>
+                </tr>
+                @foreach (var record in ViewBag.Records)
+                {
+                    <tr>
+                        <td>
+                            @record.Title
+                        </td>
+                        <td>
+                            @record.Artist
+                        </td>
+                        <td>
+                            @record.Description
+                        </td>
+                        <td>
+                            @record.AddDate
+                        </td>
+                        <td>
+                            <img src="@record.Image" style="width: 100px;" alt="@record.Title">                            
+                        </td>                        
+                        <td>
+                            @record.Lat
+                        </td>
+                        <td>
+                            @record.Long
+                        </td>
+                        <td>
+                            @Html.ActionLink("Редактировании", "EditRecord", new { id = record.id })
+                            @Html.ActionLink("Удалить", "DeleteRecord", new { id = record.id })
+                        </td>
+                    </tr>
+                }
+            </table>
+        </div>
+    </div>
+    <!-- /.row -->
+</div>
