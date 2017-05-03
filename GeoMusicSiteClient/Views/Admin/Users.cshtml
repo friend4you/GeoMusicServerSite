@@ -8,7 +8,7 @@
             <h1 class="page-header">
                 Admin Panel
             </h1>
-            @using (Html.BeginForm("Categories", "Admin", FormMethod.Post, new { enctype = "multipart/form-data" }))
+            @*@using (Html.BeginForm("Categories", "Admin", FormMethod.Post, new { enctype = "multipart/form-data" }))
             {
                 <div class="panel panel-default">
                     <table class="table">
@@ -57,7 +57,7 @@
                         </tr>
                     </table>
                 </div>
-            }
+            }*@
             <br>
             <div class="panel panel-default">
                 <table class="table">
@@ -68,9 +68,9 @@
                         <th>
                             Email
                         </th>
-                        <th>
+                        @*<th>
                             Categories
-                        </th>
+                        </th>*@
                         <th>
                         </th>
                     </tr>
@@ -83,14 +83,17 @@
                             <td>
                                 @user.Email
                             </td>
-                            <td>
+                            @*<td>
                                 <ul>
-                                @foreach (var category in user.Categories)
-                                {
-                                    <li>@category.Name</li>
-                                }
-                                    </ul>
-                            </td>
+                                    @if (user.UserCategories != null)
+                                    {
+                                        foreach (var category in user.UserCategories)
+                                        {
+                                            <li>@category.Name</li>
+                                        }
+                                    }
+                                </ul>
+                            </td>*@
                             <td>
                                 @Html.ActionLink("Редактировании", "EditUser", new { id = user.Id })
                                 @Html.ActionLink("Удалить", "Delete", new { id = user.Id })

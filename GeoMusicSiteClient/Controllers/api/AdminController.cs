@@ -68,13 +68,14 @@ namespace GeoMusicSiteClient.Controllers.api
         public ActionResult Users()
         {
             ViewBag.Users = db.GetUsers;
-            ViewBag.Categories = db.GetCategories;
             return View(new ApplicationUser());
         }
 
         public ActionResult EditUser(string id)
         {
+            
             ViewBag.Categories = db.GetCategories;
+            ViewBag.UserCategories = db.getUserCategories(id);
             return View(db.GetUser(id));
         }
 
@@ -206,7 +207,8 @@ namespace GeoMusicSiteClient.Controllers.api
         {
             try
             {
-                db.DeleteCategory(id);
+                Category cat = db.GetCategory(Convert.ToInt32(id));
+                db.DeleteCategory(cat);
                 ViewBag.Categories = db.GetCategories;
             }
             catch

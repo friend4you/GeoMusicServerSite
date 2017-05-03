@@ -79,44 +79,64 @@ namespace GeoMusicSiteClient.Controllers
 
             // This doesn't count login failures towards account lockout
             // To enable password failures to trigger account lockout, change to shouldLockout: true
-            var result = await SignInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, shouldLockout: false);
-            switch (result)
+            try
             {
-                case SignInStatus.Success:
-                    return RedirectToLocal(returnUrl);
-                case SignInStatus.LockedOut:
-                    return View("Lockout");
-                case SignInStatus.RequiresVerification:
-                    return RedirectToAction("SendCode", new { ReturnUrl = returnUrl, RememberMe = model.RememberMe });
-                case SignInStatus.Failure:
-                default:
-                    ModelState.AddModelError("", "Invalid login attempt.");
-                    return View(model);
+                var result = await SignInManager.PasswordSignInAsync(SignInManager.UserManager.FindByEmail(model.Email).UserName, model.Password, model.RememberMe, shouldLockout: false);
+                switch (result)
+                {
+                    case SignInStatus.Success:
+                        return RedirectToLocal(returnUrl);
+                    case SignInStatus.LockedOut:
+                        return View("Lockout");
+                    case SignInStatus.RequiresVerification:
+                        return RedirectToAction("SendCode", new { ReturnUrl = returnUrl, RememberMe = model.RememberMe });
+                    case SignInStatus.Failure:
+                    default:
+                        ModelState.AddModelError("", "Invalid login attempt.");
+                        return View(model);
+                }
             }
+            catch
+            {
+                ModelState.AddModelError("", "Invalid login attempt.");
+                return View(model);
+            }
+
         }
 
         //
-        // POST: /Account/JsonLogin      
+        // POST: /Account/JsonLogin   
+        [HttpPost]
         [AllowAnonymous]
         public async Task<JsonResult> JsonLogin(string email, string password)
         {
-            
-            var result = await SignInManager.PasswordSignInAsync(email, password, true, shouldLockout: false);
-            var jdSuccess = (result.Equals(SignInStatus.Success)) ? db.GetUserEmail(email) : null;                        
-            
-            string access_token =  SignInManager.UserManager.GenerateUserToken("login", jdSuccess.Id);
-            UserManager.VerifyUserToken(jdSuccess.Id, "login", access_token);
-            
-            var map = new Dictionary<String, Object>();
-            map.Add("result", result);
-            map.Add("token", access_token);            
-            map.Add("user", jdSuccess);
-            return Json(map, JsonRequestBehavior.AllowGet);
+            try
+            {
+                var result = await SignInManager.PasswordSignInAsync(SignInManager.UserManager.FindByEmail(email).UserName, password, true, shouldLockout: false);
+                var jdSuccess = (result.Equals(SignInStatus.Success)) ? db.GetUserEmail(email) : null;
+
+                string access_token = SignInManager.UserManager.GenerateUserToken("login", jdSuccess.Id);
+                db.ChangeUserToken(jdSuccess.Id, access_token);
+
+                var map = new Dictionary<String, Object>();
+                map.Add("result", result);
+                map.Add("user", jdSuccess);
+                return Json(map, JsonRequestBehavior.AllowGet);
+            }
+            catch
+            {
+                var map = new Dictionary<String, Object>();
+                map.Add("result", SignInStatus.Failure);
+                map.Add("user", null);
+                return Json(map, JsonRequestBehavior.AllowGet);
+            }
+
 
         }
         public ActionResult CheckToken(string userId, string access_token)
-        { var map = new Dictionary<String, Object>();
-            if(UserManager.VerifyUserToken(userId, "login", access_token))
+        {
+            var map = new Dictionary<String, Object>();
+            if (UserManager.VerifyUserToken(userId, "login", access_token))
             {
                 map.Add("validate", true);
             }
@@ -207,7 +227,7 @@ namespace GeoMusicSiteClient.Controllers
                 user = new ApplicationUser { UserName = model.UserName, Email = model.Email };
                 result = await UserManager.CreateAsync(user, model.Password);
                 user = (result.Succeeded) ? db.GetUserEmail(model.Email) : null;
-                
+
             }
             else
             {
@@ -221,6 +241,8 @@ namespace GeoMusicSiteClient.Controllers
                 }
                 result = new IdentityResult(errors);
             }
+            string access_token = SignInManager.UserManager.GenerateUserToken("login", user.Id);
+            db.ChangeUserToken(user.Id, access_token);
 
             map.Add("result", result);
             map.Add("user", user);

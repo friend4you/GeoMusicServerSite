@@ -4,48 +4,55 @@
 }
 
 <div class="container">
-@using (Html.BeginForm("EditUser", "Admin", FormMethod.Post, new { enctype = "multipart/form-data" }))
+    @using (Html.BeginForm("EditUser", "Admin", FormMethod.Post, new { enctype = "multipart/form-data" }))
             {
-    <div class="panel panel-default">
-        <table class="table">
-            <tr>
-                <th>
-                    Имя
-                </th>
-                <th>
-                    Email
-                </th>
-                <th>
-                    Categories
-                </th>
-                <th>
-                </th>
-            </tr>
-            <tr>
-                <td>@Html.EditorFor(model => model.UserName)</td>
-                <td>@Html.EditorFor(model => model.Email)</td>
-                <td>
-                    <ul>
-                        @foreach (var category in ViewBag.Categories)
-                        {
-
-                            if (Model.Categories != null && Model.Categories.Contains(category))
-                            {                                
-                                <li><input type="checkbox" name="categories" @(Model.Categories.Contains(category) ? "checked='checked'" : "") value="@category.id">@category.Name</li>
-                            }
-                            else
+        <div class="panel panel-default">
+            <table class="table">
+                <tr>
+                    <th>
+                        Имя
+                    </th>
+                    <th>
+                        Email
+                    </th>
+                    <th>
+                        Categories
+                    </th>
+                    <th>
+                    </th>
+                </tr>
+                <tr>
+                    <td>@Html.EditorFor(model => model.UserName)</td>
+                    <td>@Html.EditorFor(model => model.Email)</td>
+                    <td>
+                        <ul>
+                            @foreach (var category in ViewBag.Categories)
                             {
-                                <li><input type="checkbox"  name="categories" value="@category.id">@category.Name</li>
+                                if (ViewBag.UserCategories != null)
+                                {
+                                    if (ViewBag.UserCategories.Contains(category))
+                                    {
+                                        <li><input type="checkbox" name="categories" checked='checked' value="@category.id">@category.Name</li>
+                                    }
+                                    else
+                                    {
+                                        <li><input type="checkbox" name="categories" value="@category.id">@category.Name</li>
+                                    }     
+                                }
+                                else
+                                {
+                                    <li><input type="checkbox" name="categories" value="@category.id">@category.Name</li>
+                                }
+
                             }
-                        }
-                    </ul>
-                </td>
-                <td>
-                    <input type="hidden" name="Id" value="@Model.Id"/>
-                    <input type="submit" value="Edit" />
-                </td>
-            </tr>
-        </table>
-    </div>
-}
-    </div>
+                        </ul>
+                    </td>
+                    <td>
+                        <input type="hidden" name="Id" value="@Model.Id" />
+                        <input type="submit" value="Edit" />
+                    </td>
+                </tr>
+            </table>
+        </div>
+    }
+</div>

@@ -25,7 +25,7 @@ namespace GeoMusicSiteClient.Models
         public string Email { get; set; }
 
         [Display(Name = "Categories")]
-        public int[] categories { get; set; }      
+        public int[] Categories { get; set; }      
         
     }
 

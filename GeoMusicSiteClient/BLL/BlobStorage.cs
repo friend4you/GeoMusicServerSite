@@ -26,7 +26,7 @@ namespace GeoMusicSiteClient.BLL
             CloudBlockBlob blockBlob = container.GetBlockBlobReference(image.FileName);
 
             blockBlob.UploadFromStream(image.InputStream);
-            return blockBlob.Uri.ToString();
+            return "categoryimages/" + image.FileName;
         }
         public string StorageImageRecord(HttpPostedFileBase image)
         {
@@ -42,7 +42,7 @@ namespace GeoMusicSiteClient.BLL
             CloudBlockBlob blockBlob = container.GetBlockBlobReference(image.FileName);
 
             blockBlob.UploadFromStream(image.InputStream);
-            return blockBlob.Uri.ToString();
+            return "recordimages/" + image.FileName;
         }
 
         public string StorageImagePlaylist(HttpPostedFileBase image)
@@ -59,7 +59,23 @@ namespace GeoMusicSiteClient.BLL
             CloudBlockBlob blockBlob = container.GetBlockBlobReference(image.FileName);
 
             blockBlob.UploadFromStream(image.InputStream);
-            return blockBlob.Uri.ToString();
+            return "playlistimages/" + image.FileName;
+        }
+        public string StorageImageUser(HttpPostedFileBase image)
+        {
+            CloudStorageAccount storageAccount = CloudStorageAccount.Parse(CloudConfigurationManager.GetSetting("StorageConnectionString"));
+
+            CloudBlobClient blobClient = storageAccount.CreateCloudBlobClient();
+
+            CloudBlobContainer container = blobClient.GetContainerReference("usersimages");
+
+            // Create the container if it doesn't already exist.
+            container.CreateIfNotExists();
+
+            CloudBlockBlob blockBlob = container.GetBlockBlobReference(image.FileName);
+
+            blockBlob.UploadFromStream(image.InputStream);
+            return "usersimages / " + image.FileName;
         }
 
 

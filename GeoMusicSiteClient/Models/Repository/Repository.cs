@@ -6,6 +6,8 @@ using System.Web;
 using GeoMusicSiteClient.Models.DBModel;
 using Microsoft.AspNet.Identity.EntityFramework;
 
+
+
 namespace GeoMusicSiteClient.Models
 {
     public class Repository
@@ -39,7 +41,7 @@ namespace GeoMusicSiteClient.Models
             return db.Users.Where(u => u.Email == email).FirstOrDefault(); ;
         }
 
-        public List<string> 
+        public List<string>
             Failure()
         {
             List<string> list = new List<string>();
@@ -51,19 +53,50 @@ namespace GeoMusicSiteClient.Models
         {
             ApplicationUser u = GetUser(user.Id);
             db.Entry(u).State = EntityState.Modified;
-            if (u.Categories.Count != 0)
-            {
-                u.Categories.RemoveRange(0, u.Categories.Count - 1);
-            }
+            db.UserCategories.RemoveRange(db.UserCategories.Where(c => c.UserId.Id == user.Id));
+            List<Category> selectedCategories = GetCategoriesByIds(user.Categories);
 
-            foreach (int id in user.categories)
+            if (user.Categories.Count() != 0)
             {
-                Category cat = GetCategory(id);
-                u.Categories.Add(cat);
+                foreach (Category cat in selectedCategories)
+                {
+                    u.UserCategories.Add(new UserCategories { CategoryId = cat, UserId = u });
+                }
+            }
+            else
+            {
+                if (u.UserCategories.Count != 0)
+                {
+                    u.UserCategories.Clear();
+                }
             }
             u.Email = user.Email;
             u.UserName = user.UserName;
             db.SaveChanges();
+        }
+
+        public void EditUserMobile(string email, string username, HttpPostedFileBase image)
+        {
+            ApplicationUser u = GetUserEmail(email);
+            db.Entry(u).State = EntityState.Modified;
+            if (image != null)
+            {
+                string path = new BLL.BlobStorage().StorageImageUser(image);
+                u.UserImage = path;
+            }
+            u.Email = email;
+            u.UserName = username;
+
+            db.SaveChanges();
+        }
+
+        public List<Category> getUserCategories(string userId)
+        {
+            return db.UserCategories.Where(u => u.UserId.Id.Equals(userId)).Select(u => u.CategoryId).ToList();
+        }
+        public UserCategories getUserCategory(string userId, int categoryId)
+        {
+            return db.UserCategories.Where(c => c.CategoryId.id.Equals(categoryId)).Where(u => u.UserId.Id.Equals(userId)).FirstOrDefault();
         }
 
         public void CreateUser(ApplicationUser user)
@@ -78,6 +111,15 @@ namespace GeoMusicSiteClient.Models
             db.SaveChanges();
         }
 
+        public void ChangeUserToken(string userId, string token)
+        {
+            db.Users.Find(userId).Token = token;
+        }
+
+       
+
+        
+
         #endregion
 
         #region // Records CRUD
@@ -89,7 +131,7 @@ namespace GeoMusicSiteClient.Models
 
         public Record GetRecord(int id)
         {
-            return db.Records.Find(id);            
+            return db.Records.Find(id);
         }
 
         public void EditRecord(Record record)
@@ -119,6 +161,18 @@ namespace GeoMusicSiteClient.Models
             db.Records.Find(record.id).Image = path;
             db.SaveChanges();
         }
+
+        public List<Record> GetUserFavorite(string userId)
+        {
+            return db.Favorites.Where(u => u.UserId.Id == userId).Select(f => f.RecordId).ToList();
+        }
+
+        public List<Record> GetNearRecords(double lat, double lng)
+        {
+
+            return db.Records.Where(r => r.Lat <= lat + 0.004 && r.Lat >= lat - 0.004 && r.Long <= lng + 0.004 && r.Long >= lng - 0.004).ToList();
+        }
+
         #endregion
 
         #region // Playlists CRUD
@@ -137,7 +191,17 @@ namespace GeoMusicSiteClient.Models
         {
             return db.Playlists.Find(id);
         }
-       
+
+        public List<Playlist> GetUserPlaylists(string userId)
+        {
+            return db.Users.Where(u => u.Id == userId).Select(p => p.Playlists).FirstOrDefault();
+        }
+
+        public List<Playlist> GetUserSubscribed(string userId)
+        {
+            return db.Users.Where(u => u.Id == userId).Select(s => s.Subscribe).FirstOrDefault();
+        }
+
         public void EditPlaylist(Playlist playlist)
         {
             db.Entry(playlist).State = EntityState.Modified;
@@ -158,7 +222,7 @@ namespace GeoMusicSiteClient.Models
 
         public void Subscribe(string userId, int playlistId)
         {
-            
+
         }
 
         #endregion
@@ -170,14 +234,14 @@ namespace GeoMusicSiteClient.Models
             get { return db.Categories.ToList<Category>(); }
         }
 
-        public List<Category> GetCategoriesByIds(List<int> ids)
+        public List<Category> GetCategoriesByIds(int[] ids)
         {
             List<Category> result = new List<Category>();
-            foreach(int i in ids)
+            foreach (int i in ids)
             {
                 result.Add(db.Categories.Find(i));
             }
-            return result;            
+            return result;
         }
 
         public Category GetCategory(int id)
@@ -197,9 +261,9 @@ namespace GeoMusicSiteClient.Models
             db.SaveChanges();
         }
 
-        public void DeleteCategory(string id)
+        public void DeleteCategory(Category category)
         {
-            db.Categories.Remove(db.Categories.Find(Convert.ToInt32(id)));
+            db.Categories.Remove(category);
             db.SaveChanges();
         }
 
@@ -212,6 +276,11 @@ namespace GeoMusicSiteClient.Models
         {
             db.Categories.Find(id).Image = path;
             db.SaveChanges();
+        }
+
+        public void EditUserCategory(string userId, int[] categoriesId)
+        {
+
         }
 
         #endregion

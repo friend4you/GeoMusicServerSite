@@ -14,10 +14,10 @@ namespace GeoMusicSiteClient.Models
     {
         public virtual List<Playlist> Subscribe { get; set; }
         public virtual List<Record> Favorites { get; set; }
-        public string Token { get; set; }
-        public DateTime ExpireTime { get; set; }
+        public string Token { get; set; }        
+        public int ExpireDate { get; set; }       
         public string UserImage { get; set; }
-        public virtual List<Category> Categories { get; set; }
+        public virtual List<UserCategories> UserCategories { get; set; }        
         public virtual List<Playlist> Playlists { get; set; }
         public async Task<ClaimsIdentity> GenerateUserIdentityAsync(UserManager<ApplicationUser> manager)
         {
@@ -40,6 +40,7 @@ namespace GeoMusicSiteClient.Models
         public DbSet<Favorite> Favorites { get; set; }
         public DbSet<Subscribe> Subscribes { get; set; }
         public DbSet<UsingPlaylists> UsingPlaylists { get; set; }
+        public DbSet<UserCategories> UserCategories { get; set; }
 
         public static ApplicationDbContext Create()
         {
